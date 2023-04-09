@@ -1,7 +1,7 @@
 <div align="center">
 <img src="./docs/images/icon.svg" alt="预览"/>
 
-<h1 align="center">ChatGPT Next Web</h1>
+<h1 align="center">AI达人助手</h1>
 
 一键免费部署你的私人 ChatGPT 网页应用。
 
@@ -79,7 +79,7 @@ OpanAI 密钥，你在 openai 账户页面申请的 api key。
 
 ### `BASE_URL` （可选）
 
-> Default: `api.openai.com`
+> Default: `https://api.openai.com`
 
 OpenAI 接口代理 URL，如果你手动配置了 openai 接口代理，请填写此选项。
 

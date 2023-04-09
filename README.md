@@ -1,7 +1,7 @@
 <div align="center">
 <img src="./docs/images/icon.svg" alt="icon"/>
 
-<h1 align="center">ChatGPT Next Web</h1>
+<h1 align="center">AI达人助手</h1>
 
 One-Click to deploy well-designed ChatGPT web UI on Vercel.
 
@@ -121,7 +121,7 @@ Access passsword, separated by comma.
 
 ### `BASE_URL` (optional)
 
-> Default: `api.openai.com`
+> Default: `https://api.openai.com`
 
 Override openai api request base url.
 

@@ -138,8 +138,8 @@ const DEFAULT_CONFIG: ChatConfig = {
   submitKey: SubmitKey.CtrlEnter as SubmitKey,
   avatar: "1f603",
   fontSize: 14,
-  theme: Theme.Auto as Theme,
-  tightBorder: false,
+  theme: Theme.Light as Theme,
+  tightBorder: true,
   sendPreviewBubble: true,
 
   disablePromptHint: false,
@@ -330,9 +330,9 @@ export const useChatStore = create<ChatStore>()(
         const deletedSession = get().currentSession();
         const index = get().currentSessionIndex;
         const isLastSession = get().sessions.length === 1;
-        if (!isMobileScreen() || confirm(Locale.Home.DeleteChat)) {
+        if (confirm(Locale.Home.DeleteChat)) {
           get().removeSession(index);
-          
+
           showToast(Locale.Home.DeleteToast, {
             text: Locale.Home.Revert,
             onClick() {

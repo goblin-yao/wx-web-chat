@@ -9,7 +9,7 @@ const cn = {
     ChatItemCount: (count: number) => `${count} 条对话`,
   },
   Chat: {
-    SubTitle: (count: number) => `与 ChatGPT 的 ${count} 条对话`,
+    SubTitle: (count: number) => `与 AI达人助手 的 ${count} 条对话`,
     Actions: {
       ChatList: "查看消息列表",
       CompressedHistory: "查看压缩后的历史 Prompt",
@@ -34,7 +34,7 @@ const cn = {
     Copy: "全部复制",
     Download: "下载文件",
     MessageFromYou: "来自你的消息",
-    MessageFromChatGPT: "来自 ChatGPT 的消息",
+    MessageFromChatBot: "来自 AI达人助手 的消息",
   },
   Memory: {
     Title: "历史记忆",
@@ -58,10 +58,10 @@ const cn = {
       ResetAll: "重置所有选项",
       Close: "关闭",
       ConfirmResetAll: {
-        Confirm: "Are you sure you want to reset all configurations?",
+        Confirm: "确认重置全部配置吗？",
       },
       ConfirmClearAll: {
-        Confirm: "Are you sure you want to reset all chat?",
+        Confirm: "确认清除全部聊天对话框？",
       },
     },
     Lang: {

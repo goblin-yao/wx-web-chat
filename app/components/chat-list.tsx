@@ -15,6 +15,7 @@ import { isMobileScreen } from "../utils";
 export function ChatItem(props: {
   onClick?: () => void;
   onDelete?: () => void;
+  total: number;
   title: string;
   count: number;
   time: string;
@@ -41,9 +42,14 @@ export function ChatItem(props: {
             </div>
             <div className={styles["chat-item-date"]}>{props.time}</div>
           </div>
-          <div className={styles["chat-item-delete"]} onClick={props.onDelete}>
-            <DeleteIcon />
-          </div>
+          {props.total > 1 && (
+            <div
+              className={styles["chat-item-delete"]}
+              onClick={props.onDelete}
+            >
+              <DeleteIcon />
+            </div>
+          )}
         </div>
       )}
     </Draggable>
@@ -88,6 +94,7 @@ export function ChatList() {
           >
             {sessions.map((item, i) => (
               <ChatItem
+                total={sessions.length}
                 title={item.topic}
                 time={item.lastUpdate}
                 count={item.messages.length}

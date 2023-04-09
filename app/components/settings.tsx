@@ -219,7 +219,7 @@ export function Settings(props: { closeSettings: () => void }) {
               </div>
             </Popover>
           </SettingItem>
-
+          {/* 
           <SettingItem
             title={Locale.Settings.Update.Version(currentId)}
             subTitle={
@@ -243,7 +243,7 @@ export function Settings(props: { closeSettings: () => void }) {
                 onClick={() => checkUpdate(true)}
               />
             )}
-          </SettingItem>
+          </SettingItem> */}
 
           <SettingItem title={Locale.Settings.SendKey}>
             <select
@@ -359,7 +359,7 @@ export function Settings(props: { closeSettings: () => void }) {
             ></input>
           </SettingItem>
 
-          <SettingItem
+          {/* <SettingItem
             title={Locale.Settings.Prompt.List}
             subTitle={Locale.Settings.Prompt.ListCount(
               builtinCount,
@@ -371,10 +371,10 @@ export function Settings(props: { closeSettings: () => void }) {
               text={Locale.Settings.Prompt.Edit}
               onClick={() => showToast(Locale.WIP)}
             />
-          </SettingItem>
+          </SettingItem> */}
         </List>
-        <List>
-          {enabledAccessControl ? (
+        {/*  <List>
+         {enabledAccessControl ? (
             <SettingItem
               title={Locale.Settings.AccessCode.Title}
               subTitle={Locale.Settings.AccessCode.SubTitle}
@@ -390,9 +390,9 @@ export function Settings(props: { closeSettings: () => void }) {
             </SettingItem>
           ) : (
             <></>
-          )}
+          )} */}
 
-          <SettingItem
+        {/* <SettingItem
             title={Locale.Settings.Token.Title}
             subTitle={Locale.Settings.Token.SubTitle}
           >
@@ -466,10 +466,10 @@ export function Settings(props: { closeSettings: () => void }) {
                 )
               }
             ></input>
-          </SettingItem>
-        </List>
+          </SettingItem> 
+        </List>*/}
 
-        <List>
+        {/* <List>
           <SettingItem title={Locale.Settings.Model}>
             <select
               value={config.modelConfig.model}
@@ -549,7 +549,7 @@ export function Settings(props: { closeSettings: () => void }) {
               }}
             ></InputRange>
           </SettingItem>
-        </List>
+        </List> */}
       </div>
     </ErrorBoundary>
   );
