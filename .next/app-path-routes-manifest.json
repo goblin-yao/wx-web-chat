@@ -1,0 +1,5 @@
+{
+  "/api/chat-stream/route": "/api/chat-stream",
+  "/page": "/",
+  "/api/openai/route": "/api/openai"
+}
