@@ -1,1 +1,27 @@
-{"containers":[],"config":{}}
+{
+  "containers": [
+    {
+      "name": "wx-web-chat",
+      "domain": "",
+      "ip": "",
+      "containerId": "741cac6990c60c67cb39cd2a904b852e4b0a2dc4b5f72c4b23474d05aead3457"
+    }
+  ],
+  "config": {
+    "wx-web-chat": {
+      "remark": "",
+      "dockerfilePath": "Dockerfile",
+      "buildDir": "",
+      "minNum": 0,
+      "maxNum": 50,
+      "cpu": 0.5,
+      "mem": 1,
+      "policyType": "cpu",
+      "policyThreshold": 60,
+      "envParams": {},
+      "customLogs": "stdout",
+      "containerPort": 80,
+      "initialDelaySeconds": 2
+    }
+  }
+}
