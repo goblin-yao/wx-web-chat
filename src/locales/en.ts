@@ -15,6 +15,7 @@ const en: LocaleType = {
     MaxCountServerError: (count: number) => `Chat dialogs max count ${count}. This chat box will not be stored on the server, and it will disappear when the page is refreshed`,
   },
   Chat: {
+    FrequentChat: "Chatting too often, try again in a few seconds",
     SubTitle: (count: number) => `${count} messages with AIBot`,
     Actions: {
       ChatList: "Go To Chat List",

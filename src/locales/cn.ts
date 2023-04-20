@@ -10,9 +10,11 @@ const cn = {
   },
   Session: {
     MaxCount: (count: number) => `聊天对话框最多${count}个`,
-    MaxCountServerError: (count: number) => `聊天对话框最多${count}个，这个聊天框不会存储到服务端，刷新页面消失`,
+    MaxCountServerError: (count: number) =>
+      `聊天对话框最多${count}个，这个聊天框不会存储到服务端，刷新页面消失`,
   },
   Chat: {
+    FrequentChat: "聊天太频繁了，过几秒钟再试试",
     SubTitle: (count: number) => `与 GeniusAI助手 的 ${count} 条对话`,
     Actions: {
       ChatList: "查看消息列表",

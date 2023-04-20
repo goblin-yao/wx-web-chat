@@ -15,7 +15,7 @@ import { formatDate, isMobileScreen, trimTopic } from "../utils";
 import Locale from "../locales";
 import { showToast } from "../components/ui-lib";
 import { ConversationResponse } from "../types/conversation";
-import { DIALOG_MAX_COUNT } from "../constant";
+import { DIALOG_MAX_COUNT, MAX_MIL_SECOUND_SENDMESSGE } from "../constant";
 
 export type Message = ChatCompletionResponseMessage & {
   date: string;
@@ -187,10 +187,11 @@ function createEmptySession(opt?: {
   needBEStore?: boolean;
 }): ChatSession {
   const createDate = new Date().toLocaleString();
+  const tempID = uuidv4();
   const session = {
     id: Date.now(),
-    conversationId: uuidv4(),
-    topic: DEFAULT_TOPIC,
+    conversationId: tempID,
+    topic: DEFAULT_TOPIC + tempID.substring(0, 4),
     sendMemory: true,
     memoryPrompt: null,
     context: [],
@@ -236,6 +237,9 @@ interface ChatStore {
   config: ChatConfig;
   sessions: ChatSession[];
   currentSessionIndex: number;
+  lastChatWithBotTime: number;
+  getLastChatWithBotTime: () => number;
+  setLastChatWithBotTime: (time: number) => void;
   initDateFromServer: () => Promise<any>;
   clearSessions: () => void;
   removeSession: (index: number) => void;
@@ -326,8 +330,15 @@ export const useChatStore = create<ChatStore>()(
       },
       sessions: [],
       currentSessionIndex: 0,
+      lastChatWithBotTime: 0,
       config: {
         ...DEFAULT_CONFIG,
+      },
+      getLastChatWithBotTime() {
+        return get().lastChatWithBotTime;
+      },
+      setLastChatWithBotTime(_time: number) {
+        set({ lastChatWithBotTime: _time });
       },
 
       clearSessions() {
@@ -357,7 +368,7 @@ export const useChatStore = create<ChatStore>()(
         //如果这个session的message数量为0就获取这条session下面的历史聊天记录
 
         const curSesion = get().currentSession();
-        console.log("curSesion", curSesion);
+        console.log("[curSesion]", curSesion);
         if (!curSesion.messages.length) {
           messageHandler("list", curSesion.conversationId, {
             onFinish(data) {
@@ -518,6 +529,7 @@ export const useChatStore = create<ChatStore>()(
 
         // make request
         console.log("[User Input] ", content);
+
         // 获取当前sessionid currentSession
         requestChatStream(sendMessages, {
           conversationId: get().currentSession().conversationId,

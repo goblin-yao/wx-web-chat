@@ -15,6 +15,7 @@ const tw: LocaleType = {
       `聊天對話框最多${count}個，這個聊天框不會存儲到服務端，刷新頁面消失`,
   },
   Chat: {
+    FrequentChat: "聊天太頻繁了，過幾秒鐘再試試",
     SubTitle: (count: number) => `您已經與 GeniusAI助手 進行了 ${count} 條對話`,
     Actions: {
       ChatList: "查看消息列表",

@@ -41,6 +41,7 @@ import styles from "./home.module.scss";
 import chatStyle from "./chat.module.scss";
 
 import { Input, Modal, showModal } from "./ui-lib";
+import { MAX_MIL_SECOUND_SENDMESSGE } from "../constant";
 
 export function Avatar(props: { role: Message["role"] }) {
   const config = useChatStore((state) => state.config);
@@ -414,6 +415,18 @@ export function Chat(props: {
   // submit user input
   const onUserSubmit = () => {
     if (userInput.length <= 0) return;
+    const lastChatWithBotTime = chatStore.getLastChatWithBotTime();
+    // 时间限制
+    if (
+      new Date().getTime() - lastChatWithBotTime <=
+      MAX_MIL_SECOUND_SENDMESSGE
+    ) {
+      alert(Locale.Chat.FrequentChat);
+      return;
+    }
+
+    chatStore.setLastChatWithBotTime(new Date().getTime());
+
     setIsLoading(true);
     chatStore.onUserInput(userInput).then(() => setIsLoading(false));
     setBeforeInput(userInput);
@@ -529,8 +542,8 @@ export function Chat(props: {
             onClickCapture={() => {
               const newTopic = prompt(Locale.Chat.Rename, session.topic);
               if (newTopic && newTopic !== session.topic) {
-                if(newTopic.length>20){
-                  alert(Locale.Chat.RenameTolongError)
+                if (newTopic.length > 20) {
+                  alert(Locale.Chat.RenameTolongError);
                   return;
                 }
                 chatStore.updateCurrentSession((session) => {
