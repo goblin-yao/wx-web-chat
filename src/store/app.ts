@@ -293,7 +293,7 @@ export const useChatStore = create<ChatStore>()(
               {},
               {
                 onFinish: (message: any) => {
-                  resolve(message);
+                  resolve(message?.data || {});
                 },
                 onError: (error: Error, statusCode?: number) => {
                   reject(error);
@@ -314,7 +314,7 @@ export const useChatStore = create<ChatStore>()(
           //本地没有sessions就从后台获取
           const response = await _promise();
           //初始化数据，回填到本地存储中，如果出错就创建一个本地的
-          console.log("responeeee", response);
+          console.log("[conversation list responeeee]", response);
           set({
             sessions: createSessionsFromServer(
               response as ConversationResponse,
@@ -322,6 +322,8 @@ export const useChatStore = create<ChatStore>()(
             currentSessionIndex: 0,
           });
         } catch (error) {
+          console.log("[eerrrr", error);
+          //如果长度为0，需要新建一个
           set({
             sessions: [createEmptySession({ needBEStore: true })],
             currentSessionIndex: 0,
