@@ -52,6 +52,10 @@ function getHeaders() {
 }
 
 function setHeaderForTest(headers) {
+  //只有测试环境猜有这个，其他的等接入平台后使用
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
   let uid = localStorage.getItem("chat_user_id");
   if (!uid) {
     uid = "test_" + String(new Date().getTime());
@@ -149,9 +153,8 @@ export async function requestChatStream(
     const headers = {
       "Content-Type": "application/json",
     };
-    if (process.env.NODE_ENV === "development") {
-      setHeaderForTest(headers);
-    }
+
+    setHeaderForTest(headers);
 
     const _response = await axios.post(
       "/web/baidu/chat",
@@ -249,9 +252,7 @@ export async function conversationHandler(
     const headers = {
       "Content-Type": "application/json",
     };
-    if (process.env.NODE_ENV === "development") {
-      setHeaderForTest(headers);
-    }
+    setHeaderForTest(headers);
 
     const _response = await axios.post(
       `/web/conversation/${action}`,
@@ -288,9 +289,7 @@ export async function messageHandler(
     const headers = {
       "Content-Type": "application/json",
     };
-    if (process.env.NODE_ENV === "development") {
-      setHeaderForTest(headers);
-    }
+    setHeaderForTest(headers);
 
     const _response = await axios.post(
       `/web/messages/${action}`,

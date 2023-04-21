@@ -1,5 +1,5 @@
 {
-  "name": "react-webpack-typescript-starter",
+  "name": "wx-web-chat",
   "version": "0.1.0",
   "description": "Starter kit for React, Webpack (with Hot Module Replacement), Typescript and Babel.",
   "keywords": [
@@ -12,21 +12,23 @@
     "starter",
     "boilerplate"
   ],
-  "author": "Viktor Persson",
+  "author": "junping.yao",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vikpe/react-webpack-typescript-starter.git"
+    "url": "git+https://github.com/goblin-yao/wx-web-chat.git"
   },
   "bugs": {
-    "url": "https://github.com/vikpe/react-webpack-typescript-starter/issues"
+    "url": "https://github.com/vikpe/wx-web-chat/issues"
   },
-  "homepage": "https://github.com/vikpe/react-webpack-typescript-starter",
+  "homepage": "https://github.com/vikpe/wx-web-chat",
   "scripts": {
-    "build": "yarn run clean-dist && webpack --config=configs/webpack/prod.js",
+    "build": "npm run clean-dist && npm run clean-server-dist && webpack --config=configs/webpack/prod.js && npm run copyfile",
     "clean-dist": "rimraf dist/*",
+    "clean-server-dist": "rimraf ../wx-mp-node-express/public/*",
+    "copyfile": "cp dist/* ../wx-mp-node-express/public/*",
     "lint": "eslint './src/**/*.{js,ts,tsx}' --quiet",
-    "start": "NODE_ENV=development yarn run start-dev",
+    "start": "NODE_ENV=development npm run start-dev",
     "start-dev": "webpack serve --config=configs/webpack/dev.js",
     "test": "jest --coverage --watchAll --config=configs/jest.json"
   },

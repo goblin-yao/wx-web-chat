@@ -720,8 +720,8 @@ export const useChatStore = create<ChatStore>()(
 function createSessionsFromServer(
   response: ConversationResponse,
 ): ChatSession[] {
-  const _coverstaionFromBE = response.result;
-  const firstConversationMessages = response.firstConversationMessages;
+  const _coverstaionFromBE = response?.result || [];
+  const firstConversationMessages = response?.firstConversationMessages || [];
   const _temp = []; //用来返回的初始化数据
 
   for (let index = 0; index < _coverstaionFromBE.length; index++) {
