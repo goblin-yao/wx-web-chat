@@ -173,6 +173,8 @@ const cn = {
     Edit: "前置上下文和历史记忆",
     Add: "新增一条",
   },
+  LeftTimes: "剩余次数:",
+  MemberShip:"会员"
 };
 
 export type LocaleType = typeof cn;

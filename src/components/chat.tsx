@@ -326,9 +326,10 @@ export function Chat(props: {
   type RenderMessage = Message & { preview?: boolean };
 
   const chatStore = useChatStore();
-  const [session, sessionIndex] = useChatStore((state) => [
+  const [session, sessionIndex, chatLeftNums] = useChatStore((state) => [
     state.currentSession(),
     state.currentSessionIndex,
+    state.chatLeftNums,
   ]);
   const fontSize = useChatStore((state) => state.config.fontSize);
 
@@ -525,6 +526,18 @@ export function Chat(props: {
     );
 
   const [showPromptModal, setShowPromptModal] = useState(false);
+  function getPlaceholder(chatLeftNums) {
+    return (
+      // "会员"
+      // 剩余次数
+      Locale.Chat.Input(submitKey) +
+      "[" +
+      (chatLeftNums === -1000
+        ? Locale.MemberShip
+        : `${Locale.LeftTimes}${chatLeftNums}`) +
+      "]"
+    );
+  }
 
   // Auto focus
   useEffect(() => {
@@ -697,7 +710,7 @@ export function Chat(props: {
           <textarea
             ref={inputRef}
             className={styles["chat-input"]}
-            placeholder={Locale.Chat.Input(submitKey)}
+            placeholder={getPlaceholder(chatLeftNums)}
             onInput={(e) => onInput(e.currentTarget.value)}
             value={userInput}
             onKeyDown={onInputKeyDown}

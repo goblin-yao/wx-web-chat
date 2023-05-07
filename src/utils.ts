@@ -156,3 +156,9 @@ export function formatDate(milliseconds: number): string {
   const seconds = date.getSeconds().toString().padStart(2, "0");
   return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export function setCookie(name, value) {
+  const Days = 90;
+  const exp = new Date(new Date().getTime() + Days * 24 * 60 * 60 * 1000);
+  document.cookie = name + "=" + value + ";expires=" + exp;
+}

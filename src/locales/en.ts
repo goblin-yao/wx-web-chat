@@ -12,7 +12,8 @@ const en: LocaleType = {
   },
   Session: {
     MaxCount: (count: number) => `Chat dialogs max count ${count}`,
-    MaxCountServerError: (count: number) => `Chat dialogs max count ${count}. This chat box will not be stored on the server, and it will disappear when the page is refreshed`,
+    MaxCountServerError: (count: number) =>
+      `Chat dialogs max count ${count}. This chat box will not be stored on the server, and it will disappear when the page is refreshed`,
   },
   Chat: {
     FrequentChat: "Chatting too often, try again in a few seconds",
@@ -177,6 +178,8 @@ const en: LocaleType = {
     Edit: "Contextual and Memory Prompts",
     Add: "Add One",
   },
+  LeftTimes: "Left chat times:",
+  MemberShip: "Membership",
 };
 
 export default en;

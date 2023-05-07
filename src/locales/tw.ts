@@ -172,6 +172,8 @@ const tw: LocaleType = {
     Edit: "前置上下文和歷史記憶",
     Add: "新增壹條",
   },
+  LeftTimes: "剩餘次數:",
+  MemberShip: "會員",
 };
 
 export default tw;

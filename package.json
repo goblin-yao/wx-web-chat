@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/vikpe/wx-web-chat",
   "scripts": {
-    "build": "npm run clean-dist && npm run clean-server-dist && webpack --config=configs/webpack/prod.js && npm run copyfile",
+    "build": "NODE_ENV=production npm run clean-dist && npm run clean-server-dist && webpack --config=configs/webpack/prod.js && npm run copyfiles",
     "clean-dist": "rimraf dist/*",
     "clean-server-dist": "rimraf ../wx-mp-node-express/public/*",
-    "copyfile": "cp dist/* ../wx-mp-node-express/public/*",
+    "copyfiles": "cp -R dist/* ../wx-mp-node-express/public/",
     "lint": "eslint './src/**/*.{js,ts,tsx}' --quiet",
     "start": "NODE_ENV=development npm run start-dev",
     "start-dev": "webpack serve --config=configs/webpack/dev.js",

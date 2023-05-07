@@ -13,5 +13,6 @@ export interface AIResponseType {
   id: string;
   parentMessageId: string;
   conversationId: string;
+  chatLeftNums: number;
   detail?: { model: string };
 }

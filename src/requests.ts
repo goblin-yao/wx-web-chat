@@ -2,10 +2,21 @@ import axios from "axios";
 import type { ChatRequest, ChatReponse } from "./api/openai/typing";
 import { Message, ModelConfig, useAccessStore, useChatStore } from "./store";
 import { showToast } from "./components/ui-lib";
+import { setCookie } from "./utils";
 import { AIResponseType } from "./types/openai";
 import { ChatConversation } from "./types/conversation";
 
 const TIME_OUT_MS = 30000;
+
+//设置cookie，测试环境方便测试
+(() => {
+  //只有测试环境猜有这个，其他的等接入平台后使用
+  if (process.env.NODE_ENV === "development") {
+    //只是用来测试的openid
+    // setCookie("openid", "oBxdH6DqDTaAqb7k49UgBG3et9EM");
+    // setCookie("unionid", "ob-vI5p5P9MOmSr4tIc1fH5yetCQ");
+  }
+})();
 
 const makeRequestParam = (
   messages: Message[],
@@ -49,20 +60,6 @@ function getHeaders() {
   }
 
   return headers;
-}
-
-function setHeaderForTest(headers) {
-  //只有测试环境猜有这个，其他的等接入平台后使用
-  if (process.env.NODE_ENV !== "development") {
-    return;
-  }
-  let uid = localStorage.getItem("chat_user_id");
-  if (!uid) {
-    uid = "test_" + String(new Date().getTime());
-    localStorage.setItem("chat_user_id", uid);
-  }
-  headers["x-web-openid"] = uid; //测试的openid
-  headers["x-web-unionid"] = uid + "_unionid";
 }
 
 export function requestOpenaiClient(path: string) {
@@ -153,8 +150,6 @@ export async function requestChatStream(
     const headers = {
       "Content-Type": "application/json",
     };
-
-    setHeaderForTest(headers);
 
     const _response = await axios.post(
       "/web/baidu/chat",
@@ -252,7 +247,6 @@ export async function conversationHandler(
     const headers = {
       "Content-Type": "application/json",
     };
-    setHeaderForTest(headers);
 
     const _response = await axios.post(
       `/web/conversation/${action}`,
@@ -289,7 +283,6 @@ export async function messageHandler(
     const headers = {
       "Content-Type": "application/json",
     };
-    setHeaderForTest(headers);
 
     const _response = await axios.post(
       `/web/messages/${action}`,
@@ -302,6 +295,25 @@ export async function messageHandler(
       },
     );
     console.log("[messageHandler Response] ", _response);
+    if (200 === _response.status) {
+      options?.onFinish(_response?.data?.data);
+    } else {
+      console.error("Response Error", _response);
+      options?.onError(new Error("Response Error"), _response.status);
+    }
+  } catch (err) {
+    console.error("NetWork Error", err);
+    options?.onError(err as Error);
+  }
+}
+
+export async function loginStausHandler(options: {
+  onFinish: (message: any) => void;
+  onError: (error: Error, statusCode?: number) => void;
+}) {
+  try {
+    const _response = await axios.get(`/web/checklogin`);
+    console.log("[loginStausHandler Response] ", _response);
     if (200 === _response.status) {
       options?.onFinish(_response?.data?.data);
     } else {

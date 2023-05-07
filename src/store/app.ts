@@ -6,6 +6,7 @@ import { type ChatCompletionResponseMessage } from "openai";
 import {
   ControllerPool,
   conversationHandler,
+  loginStausHandler,
   messageHandler,
   requestChatStream,
   requestWithPrompt,
@@ -236,6 +237,7 @@ function createEmptySession(opt?: {
 interface ChatStore {
   config: ChatConfig;
   sessions: ChatSession[];
+  chatLeftNums: number;
   currentSessionIndex: number;
   lastChatWithBotTime: number;
   getLastChatWithBotTime: () => number;
@@ -302,7 +304,30 @@ export const useChatStore = create<ChatStore>()(
             );
           });
         };
+        const _loginCheckerPromise = () => {
+          return new Promise((resolve, reject) => {
+            loginStausHandler({
+              onFinish: (message: any) => {
+                resolve(message || {});
+              },
+              onError: (error: Error, statusCode?: number) => {
+                reject(error);
+              },
+            });
+          });
+        };
         try {
+          try {
+            const loginResult = await _loginCheckerPromise();
+            set({
+              chatLeftNums: loginResult.chatLeftNums,
+            });
+          } catch (error) {
+            //本地开发环境不校验登陆态
+            if (process.env.NODE_ENV !== "development") {
+              window.location.href = "/wxopenapi/login";
+            }
+          }
           //如果本地有数据就不从后台更新
           if (get().sessions.length) {
             set({
@@ -331,6 +356,7 @@ export const useChatStore = create<ChatStore>()(
         }
       },
       sessions: [],
+      chatLeftNums: 0,
       currentSessionIndex: 0,
       lastChatWithBotTime: 0,
       config: {
@@ -541,6 +567,8 @@ export const useChatStore = create<ChatStore>()(
             botMessage.streaming = false;
             botMessage.content = _mesResponse.text;
             botMessage.id = _mesResponse.id;
+            let chatLeftNums = _mesResponse.chatLeftNums;
+            set({ chatLeftNums });
             get().onNewMessage(botMessage);
           },
           onError(error, statusCode) {
