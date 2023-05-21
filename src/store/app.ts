@@ -252,7 +252,6 @@ interface ChatStore {
   currentSession: () => ChatSession;
   onNewMessage: (message: Message) => void;
   onUserInput: (content: string) => Promise<void>;
-  summarizeSession: () => void;
   updateStat: (message: Message) => void;
   updateCurrentSession: (updater: (session: ChatSession) => void) => void;
   updateMessage: (
@@ -529,7 +528,6 @@ export const useChatStore = create<ChatStore>()(
           session.lastUpdate = new Date().toLocaleString();
         });
         get().updateStat(message);
-        get().summarizeSession();
       },
 
       async onUserInput(content) {
@@ -563,6 +561,14 @@ export const useChatStore = create<ChatStore>()(
           conversationId: get().currentSession().conversationId,
           parentMessageId: getParentMessageId(sendMessages),
           messageId: userMessage.id,
+          onProgress(_mesResponse) {
+            botMessage.streaming = false;
+            botMessage.content = _mesResponse.text;
+            botMessage.id = _mesResponse.id;
+            let chatLeftNums = _mesResponse.chatLeftNums;
+            set({ chatLeftNums });
+            get().onNewMessage(botMessage);
+          },
           onFinish(_mesResponse) {
             botMessage.streaming = false;
             botMessage.content = _mesResponse.text;
@@ -628,75 +634,6 @@ export const useChatStore = create<ChatStore>()(
           session.messages = [];
           session.memoryPrompt = "";
         });
-      },
-
-      summarizeSession() {
-        const session = get().currentSession();
-
-        // should summarize topic after chating more than 50 words
-        const SUMMARIZE_MIN_LEN = 50;
-        if (
-          session.topic === DEFAULT_TOPIC &&
-          countMessages(session.messages) >= SUMMARIZE_MIN_LEN
-        ) {
-          requestWithPrompt(session.messages, Locale.Store.Prompt.Topic).then(
-            (res) => {
-              get().updateCurrentSession(
-                (session) =>
-                  (session.topic = res ? trimTopic(res) : DEFAULT_TOPIC),
-              );
-            },
-          );
-        }
-
-        const config = get().config;
-        let toBeSummarizedMsgs = session.messages.slice(
-          session.lastSummarizeIndex,
-        );
-
-        const historyMsgLength = countMessages(toBeSummarizedMsgs);
-
-        if (historyMsgLength > get().config?.modelConfig?.max_tokens ?? 4000) {
-          const n = toBeSummarizedMsgs.length;
-          toBeSummarizedMsgs = toBeSummarizedMsgs.slice(
-            Math.max(0, n - config.historyMessageCount),
-          );
-        }
-
-        // add memory prompt
-        toBeSummarizedMsgs.unshift(get().getMemoryPrompt());
-
-        const lastSummarizeIndex = session.messages.length;
-
-        console.log(
-          "[Chat History] ",
-          toBeSummarizedMsgs,
-          historyMsgLength,
-          config.compressMessageLengthThreshold,
-        );
-
-        if (historyMsgLength > config.compressMessageLengthThreshold) {
-          requestChatStream(
-            toBeSummarizedMsgs.concat({
-              role: "system",
-              content: Locale.Store.Prompt.Summarize,
-              date: "",
-            }),
-            {
-              filterBot: false,
-              onMessage(message, done) {
-                session.memoryPrompt = message;
-                if (done) {
-                  console.log("[Memory] ", session.memoryPrompt);
-                  session.lastSummarizeIndex = lastSummarizeIndex;
-                }
-              },
-              onError(error) {
-                console.error("[Summarize] ", error);
-              },
-            },
-          );
-        }
       },
 
       updateStat(message) {

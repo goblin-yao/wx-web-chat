@@ -6,7 +6,7 @@ import { setCookie } from "./utils";
 import { AIResponseType } from "./types/openai";
 import { ChatConversation } from "./types/conversation";
 
-const TIME_OUT_MS = 30000;
+const TIME_OUT_MS = 60000;
 
 //设置cookie，测试环境方便测试
 (() => {
@@ -140,20 +140,22 @@ export async function requestChatStream(
     conversationId: string;
     parentMessageId?: string;
     messageId: string;
+    onProgress: (message: AIResponseType) => void;
     onFinish: (message: AIResponseType) => void;
     onError: (error: Error, statusCode?: number) => void;
   },
 ) {
   console.log("[Request] ", messages);
 
-  try {
-    const headers = {
-      "Content-Type": "application/json",
-    };
+  let controller = new AbortController();
 
-    const _response = await axios.post(
-      "/web/baidu/chat",
-      {
+  try {
+    const response = await fetch("/web/baidu/chatstream", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
         messages,
         options: {
           conversationId: options.conversationId,
@@ -161,24 +163,33 @@ export async function requestChatStream(
           messageId: options.messageId,
           promptType: 1,
         },
-      },
-      {
-        headers,
-        timeout: TIME_OUT_MS,
-      },
-    );
-    console.log("[Response] ", _response);
-    if (200 === _response.status) {
-      options?.onFinish(_response?.data);
-    } else {
-      console.error("Response Error", _response);
-      options?.onError(new Error("Response Error"), _response.status);
+      }),
+      signal: controller.signal,
+    });
+
+    const reader = (response as any).body.getReader();
+    let data = {} as AIResponseType;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        // console.log("[data done]", data);
+        options?.onFinish(data);
+        break;
+      }
+
+      let decodedValue = new TextDecoder().decode(value);
+      //一次可能接受多次数据
+      const tempDate = decodedValue.split("|pzkj|jkzp|");
+      tempDate.map((_data) => {
+        if (_data) {
+          options?.onProgress((data = JSON.parse(_data)));
+          // console.log("[_data]", _data);
+        }
+      });
     }
   } catch (err) {
     console.error("NetWork Error", err);
-    if (err?.response?.data) {
-      alert(err?.response?.data);
-    }
+    alert(err);
     options?.onError(err as Error);
   }
 }
