@@ -179,11 +179,14 @@ export async function requestChatStream(
 
       let decodedValue = new TextDecoder().decode(value);
       //一次可能接受多次数据
-      const tempDate = decodedValue.split("|pzkj|jkzp|");
+      const tempDate = decodedValue.split("$@@$");
       tempDate.map((_data) => {
         if (_data) {
-          options?.onProgress((data = JSON.parse(_data)));
-          // console.log("[_data]", _data);
+          try {
+            options?.onProgress((data = JSON.parse(_data)));
+          } catch (error) {
+            console.error("[error]", error);
+          }
         }
       });
     }
