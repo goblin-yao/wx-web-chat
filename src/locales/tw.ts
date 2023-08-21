@@ -137,6 +137,8 @@ const tw: LocaleType = {
       Placeholder: "請輸入授權碼",
     },
     Model: "模型 (model)",
+    LogoutTitle: "登錄->註銷",
+    LogoutText: "註銷",
     Temperature: {
       Title: "隨機性 (temperature)",
       SubTitle: "值越大，回復越隨機",

@@ -140,6 +140,8 @@ const en: LocaleType = {
       Placeholder: "Need Access Code",
     },
     Model: "Model",
+    LogoutTitle: "Logout?",
+    LogoutText: "Click to Logout",
     Temperature: {
       Title: "Temperature",
       SubTitle: "A larger value makes the more random output",

@@ -137,6 +137,8 @@ const cn = {
       Placeholder: "请输入访问密码",
     },
     Model: "模型 (model)",
+    LogoutTitle: "登录->注销",
+    LogoutText: "注销",
     Temperature: {
       Title: "随机性 (temperature)",
       SubTitle: "值越大，回复越随机，大于 1 的值可能会导致乱码",
@@ -174,7 +176,7 @@ const cn = {
     Add: "新增一条",
   },
   LeftTimes: "剩余次数:",
-  MemberShip:"会员"
+  MemberShip: "会员",
 };
 
 export type LocaleType = typeof cn;

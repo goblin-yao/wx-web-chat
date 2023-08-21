@@ -7,6 +7,7 @@ import styles from "./settings.module.scss";
 import ResetIcon from "../icons/reload.svg";
 import CloseIcon from "../icons/close.svg";
 import ClearIcon from "../icons/clear.svg";
+import LogoutIcon from "../icons/logout.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
 import EyeOffIcon from "../icons/eye-off.svg";
@@ -106,6 +107,10 @@ export function Settings(props: { closeSettings: () => void }) {
       .finally(() => {
         setLoadingUsage(false);
       });
+  }
+
+  function logoutFunc() {
+    window.location.href = "/wxopenapi/logout";
   }
 
   const accessStore = useAccessStore();
@@ -549,6 +554,18 @@ export function Settings(props: { closeSettings: () => void }) {
             ></InputRange>
           </SettingItem>
         </List> */}
+
+        <List>
+          <SettingItem title={Locale.Settings.LogoutTitle}>
+            <IconButton
+              icon={<LogoutIcon />}
+              bordered={true}
+              onClick={logoutFunc}
+              text={Locale.Settings.LogoutText}
+              className={styles["password-eye"]}
+            />
+          </SettingItem>
+        </List>
       </div>
     </ErrorBoundary>
   );

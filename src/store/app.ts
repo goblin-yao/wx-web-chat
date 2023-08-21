@@ -138,7 +138,7 @@ export const ModalConfigValidator = {
 };
 
 const DEFAULT_CONFIG: ChatConfig = {
-  historyMessageCount: 2,
+  historyMessageCount: 6,
   compressMessageLengthThreshold: 1000,
   sendBotMessages: true as boolean,
   submitKey: SubmitKey.CtrlEnter as SubmitKey,
@@ -281,7 +281,8 @@ function getParentMessageId(msgs: Message[]) {
   return messageId;
 }
 
-const LOCAL_KEY = "chat-next-web-store";
+const LOCAL_KEY = "chat-next-web-store-v1";
+localStorage.removeItem('chat-next-web-store')
 
 export const useChatStore = create<ChatStore>()(
   persist(
